@@ -7,12 +7,12 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-600">{{clean( trans('niva-backend.edit_client') , array('Attr.EnableID' => true))}}</h1>
+    <h1 class="h3 mb-2 text-black-800">{{clean( trans('niva-backend.edit_client') , array('Attr.EnableID' => true))}}</h1>
 
     <!-- DataTales Example -->
-    <div class="card shadow mb-3">
+    <div class="card shadow mb-4">
         <div class="card-header py-2">
-            <h6 class="m-0 font-weight-bold text-secondary">{{clean( trans('niva-backend.edit_client') , array('Attr.EnableID' => true))}}</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{clean( trans('niva-backend.edit_client') , array('Attr.EnableID' => true))}}</h6>
         </div>
         <div class="card-body">
 
