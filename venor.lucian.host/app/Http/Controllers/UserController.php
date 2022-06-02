@@ -78,7 +78,10 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-   
+    public function show(User $user)
+    {
+        return view('users.show', compact('user'));
+    }
 
 
 
@@ -88,7 +91,11 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-   
+    public function edit(User $user)
+    {
+        $roles = DB::select('select * from roles');
+        return view('users.edit', compact('user', 'roles'));
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -96,6 +103,38 @@ class UserController extends Controller
      * @param  \App\Models\user  $user
      * @return \Illuminate\Http\Response
      */
+    public function update(UserEditRequest $request, User $user)
+    {
+        if(trim($request->password) == '') {
+            $input = $request->except('password'); //pass everything excerpt the pass field
+        } else {
+            $input = $request->all();
+            $input['password'] = bcrypt($request->password);
+        }
+     
+        if ($file = $request->file('photo_id')) {
+            
+            $name = time() . $file->getClientOriginalName();
+
+            $file->move('images/media/', $name);
+
+            $photo = Photo::create(['file'=>$name]);
+
+            $input['photo_id'] = $photo->id;
+        }
+
+        $user->update($input);
+
+        return back()->with('user_success','User updated successfully!');
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return redirect('/admin/users');
+    }
+
    
     /**
      * Remove the specified resource from storage.
@@ -104,4 +143,31 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
    
+
+
+
+   
+    public function delete_users(Request $request, User $user) {
+
+
+        if(isset($request->delete_all) && !empty($request->checkbox_array)) {
+            $users = User::findOrFail($request->checkbox_array);
+            foreach ($users as $user) {
+                if($user->id != $request->current_user){
+                    $user->delete();
+                }
+            }
+            return back()->with('user_success','User/s deleted successfully! The current user can\'t be deleted!');
+        } else {
+            return redirect('/admin/users');
+        }
+
+        $users = User::findOrFail($request->checkbox_array);
+        foreach ($users as $user) {
+            $user->delete();
+        }
+
+        return redirect('/admin/users');
+        //return 'works';
+    }
 }
