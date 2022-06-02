@@ -50,6 +50,10 @@ class ClientController extends Controller
 
         return back()->with('client_success','Client created successfully!');
     }
+    public function edit($request)
+    {
+
+    }
 
 
 
