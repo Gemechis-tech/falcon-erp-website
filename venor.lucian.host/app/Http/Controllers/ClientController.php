@@ -9,7 +9,7 @@ use App\Models\Photo;
 
 class ClientController extends Controller
 {
-    //
+    //Author Gemechis Shiferaw
 
 
     public function index()
