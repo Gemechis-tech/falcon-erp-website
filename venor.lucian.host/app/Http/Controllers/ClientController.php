@@ -50,13 +50,10 @@ class ClientController extends Controller
 
         return back()->with('client_success','Client created successfully!');
     }
-    public function edit($request)
+    public function edit(Client $client)
     {
-
+        return view('client.client-edit', compact('client'));
     }
-
-
-
    
     /**
      * Update the specified resource in storage.
@@ -65,6 +62,27 @@ class ClientController extends Controller
      * @param  \App\Models\client  $client
      * @return \Illuminate\Http\Response
      */
+    public function update(ClientRequest $request, Client $client)
+    {
+        
+        $input = $request->all();
+
+        if ($file = $request->file('photo_id')) {
+            
+            $name = time() . $file->getClientOriginalName();
+
+            $file->move('images/media/', $name);
+
+            $photo = Photo::create(['file'=>$name]);
+
+            $input['photo_id'] = $photo->id;
+        }
+
+
+        $client->update($input);
+
+        return back()->with('client_success','Client updated successfully!');
+    }
 
 
  
